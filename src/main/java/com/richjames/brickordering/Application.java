@@ -3,6 +3,7 @@ package com.richjames.brickordering;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.richjames.brickordering.config.ApplicationConfiguration;
+import com.richjames.brickordering.config.JdbiProviderModule;
 import com.richjames.brickordering.resources.CustomerResource;
 import de.thomaskrille.dropwizard_template_config.TemplateConfigBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -30,6 +31,7 @@ public class Application extends io.dropwizard.Application<ApplicationConfigurat
 
         GuiceBundle<ApplicationConfiguration> guiceBundle = GuiceBundle.<ApplicationConfiguration>builder()
                 .installers(ResourceInstaller.class)
+                .modules(new JdbiProviderModule())
                 .extensions(CustomerResource.class)
                 .build();
         bootstrap.addBundle(guiceBundle);
