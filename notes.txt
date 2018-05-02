@@ -1,0 +1,16 @@
+Endpoints:
+
+- POST - /orders
+- GET - /orders/{orderId}
+- PUT - /orders/{orderId}
+
+
+SQL:
+
+CREATE TABLE orders
+(
+  id                UUID PRIMARY KEY DEFAULT UNIQUE,
+  customer_id       UUID,
+  order             JSONB,
+  last_updated      TIMESTAMP DEFAULT NOW()
+);

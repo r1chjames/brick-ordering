@@ -1,0 +1,32 @@
+server:
+  applicationContextPath: /order/v1
+  applicationConnectors:
+    - type: http
+      port: 8080
+  requestLog:
+    appenders:
+      - type: console
+        threshold: ALL
+
+database:
+  driverClass: org.postgresql.Driver
+  url: jdbc:postgresql://localhost:5433/postgres
+  user: postgres
+  password: Pa55w0rd!
+  properties:
+    charSet: UTF-8
+  maxWaitForConnection: 1s
+  validationQuery: "/* MyService Health Check */ SELECT 1"
+  evictionInterval: 10s
+  minIdleTime: 1 minute
+
+logging:
+  level: INFO
+  loggers:
+    io.dropwizard: INFO
+  appenders:
+    - type: console
+      threshold: ALL
+      timeZone: UTC
+      target: stdout
+      logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p %logger{0}:%L - %m%n"

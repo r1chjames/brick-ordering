@@ -1,0 +1,105 @@
+// Apply the java plugin to add support for Java
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'gradle-one-jar'
+
+allprojects {
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.5.1'
+}
+
+
+task jarIt(type: OneJar) {
+    mainClass = 'com.r1chjames.brickordering.Application'
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testRuntime
+    }
+}
+
+task cucumber() {
+    dependsOn assemble, compileTestJava
+    doLast {
+        javaexec {
+            main = 'cucumber.api.cli.Main'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            if (project.hasProperty('ciBuild')) {
+                systemProperties ciBuild: 'ciBuild'
+            }
+            args = ['-f', 'usage', '--glue', 'steps', 'src/test/resources', '--tags', '~@wip', '--format', 'html:build/reports', '--format', 'json:build/reports/report.json']
+        }
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'lib'
+    }
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+
+    compile(
+            'io.dropwizard:dropwizard-core:1.3.0',
+            'io.dropwizard:dropwizard-jdbi:1.3.0',
+            'de.thomaskrille:dropwizard-template-config:1.5.0',
+
+            'ru.vyarus:dropwizard-guicey:4.1.0',
+            'org.projectlombok:lombok:1.16.20',
+            'org.json:json:20170516',
+            'com.diffplug.durian:durian:3.4.0',
+
+            'postgresql:postgresql:9.4.1208-jdbc42-atlassian-hosted',
+            'org.jdbi:jdbi:2.38.1',
+            'ru.vyarus.guicey:guicey-jdbi:0.3.0',
+    )
+
+    compile fileTree(dir: 'lib')
+
+    testCompile(
+            'junit:junit:4.12',
+            'io.dropwizard:dropwizard-testing:1.3.0',
+            'org.mockito:mockito-core:2.17.0',
+            'org.hamcrest:hamcrest-all:1.3',
+            'org.easytesting:fest-assert:1.4',
+            'info.cukes:cucumber-java8:1.2.5',
+            'info.cukes:cucumber-picocontainer:1.2.5',
+            'info.cukes:cucumber-junit:1.2.5',
+            'com.opentable.components:otj-pg-embedded:0.11.0'
+    )
+}
+
+buildscript {
+    repositories {
+        flatDir {
+            dirs 'lib'
+        }
+        maven {
+            url 'http://repo.spring.io/plugins-release'
+        }
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+        jcenter()
+        mavenCentral()
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+
+    dependencies {
+        classpath ':annotations-2.0.1'
+        classpath 'gradle.plugin.com.github.onslip:gradle-one-jar:1.0.5'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+    }
+}

@@ -1,0 +1,15 @@
+#Intellij files
+*.ipr
+*.iml
+*.iws
+.idea/
+out/
+build/
+images/
+
+#Gradle files
+.gradle/
+
+#General
+logs/
+
