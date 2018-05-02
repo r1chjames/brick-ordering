@@ -12,9 +12,15 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstal
 @Slf4j
 public class Application extends io.dropwizard.Application<ApplicationConfiguration> {
 
+    private static Environment applicationEnvironment;
+
     public static void main(String[] args) throws Exception {
         Application application = new Application();
         application.run(args);
+    }
+
+    public static void stop() throws Exception {
+        applicationEnvironment.getApplicationContext().getServer().stop();
     }
 
     @Override
@@ -31,6 +37,7 @@ public class Application extends io.dropwizard.Application<ApplicationConfigurat
 
     @Override
     public void run(ApplicationConfiguration applicationConfiguration, Environment environment) {
+        applicationEnvironment = environment;
         environment.jersey().register(CustomerResource.class);
     }
 }

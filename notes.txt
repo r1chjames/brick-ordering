@@ -7,10 +7,22 @@ Endpoints:
 
 SQL:
 
-CREATE TABLE orders
+CREATE DATABASE ordering;
+
+CREATE TABLE order_headers
 (
-  id                UUID PRIMARY KEY DEFAULT UNIQUE,
+  id                UUID PRIMARY KEY,
   customer_id       UUID,
-  order             JSONB,
   last_updated      TIMESTAMP DEFAULT NOW()
 );
+
+CREATE TABLE orderLines
+(
+  id                UUID REFERENCES order_headers(id),
+  item_number       INTEGER,
+  quantity          INTEGER
+);
+
+
+TODO:
+- Use flyway

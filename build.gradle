@@ -75,7 +75,9 @@ dependencies {
             'info.cukes:cucumber-java8:1.2.5',
             'info.cukes:cucumber-picocontainer:1.2.5',
             'info.cukes:cucumber-junit:1.2.5',
-            'com.opentable.components:otj-pg-embedded:0.11.0'
+            'com.opentable.components:otj-pg-embedded:0.11.0',
+            'com.squareup.retrofit2:retrofit:2.4.0',
+            'com.squareup.retrofit2:converter-jackson:2.4.0'
     )
 }
 
