@@ -25,6 +25,7 @@ import static com.richjames.brickordering.steps.UtilSteps.startService;
 import static com.richjames.brickordering.steps.UtilSteps.stopService;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class OrderSteps {
 
@@ -120,7 +121,16 @@ public class OrderSteps {
 
     @When("^A \"([^\"]*)\" request is submitted with an invalid Order reference$")
     public void aRequestIsSubmittedWithAnInvalidOrderReference(String arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        UUID orderRef = UUID.randomUUID();
+        Response<OrderHeader> returnedOrder = apiService.getOrderByRef(orderRef).execute();
+
+        data.setOrderHeaderResponse(returnedOrder.body());
+        data.setResponseCode(returnedOrder.code());
+    }
+
+    @Then("^No order details are returned$")
+    public void noOrderDetailsAreReturned() throws Throwable {
+        assertNull(data.getOrderHeaderResponse());
+        assertEquals(404, data.getResponseCode());
     }
 }

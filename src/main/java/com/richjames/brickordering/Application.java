@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.richjames.brickordering.config.ApplicationConfiguration;
 import com.richjames.brickordering.config.JdbiProviderModule;
+import com.richjames.brickordering.exception.ApplicationExceptionMapper;
 import com.richjames.brickordering.resources.CustomerResource;
 import de.thomaskrille.dropwizard_template_config.TemplateConfigBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -44,6 +45,7 @@ public class Application extends io.dropwizard.Application<ApplicationConfigurat
     public void run(ApplicationConfiguration applicationConfiguration, Environment environment) {
         applicationEnvironment = environment;
         environment.jersey().register(CustomerResource.class);
+        environment.jersey().register(new ApplicationExceptionMapper());
 
         environment.getObjectMapper().registerModule(new JavaTimeModule());
         environment.getObjectMapper().configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);

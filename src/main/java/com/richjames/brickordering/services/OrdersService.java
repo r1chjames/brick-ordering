@@ -5,6 +5,7 @@ import com.richjames.brickordering.dao.OrderHeaderDao;
 import com.richjames.brickordering.dao.OrderLineDao;
 import com.richjames.brickordering.entities.OrderHeader;
 import com.richjames.brickordering.entities.OrderLine;
+import com.richjames.brickordering.exception.ApplicationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,10 @@ public class OrdersService {
 
     public OrderHeader getOrderById(UUID orderId) {
         OrderHeader orderToReturn = orderHeaderDao.getOrderHeaderById(orderId);
+
+        if (orderToReturn == null) {
+            throw new ApplicationException("Order not found", 404);
+        }
 
         List<OrderLine> orderLines = orderLineDao.getOrderLinesForId(orderId);
         orderToReturn.setOrderLines(orderLines);

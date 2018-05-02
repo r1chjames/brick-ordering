@@ -11,4 +11,5 @@ public class Data {
 
     private OrderHeader orderHeaderResponse;
     private OrderHeader orderToBeSumitted;
+    private int responseCode;
 }
