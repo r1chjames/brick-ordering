@@ -1,13 +1,13 @@
-#Ordering v1 Service
+# Ordering v1 Service
 
 Ordering v1 service written in Java using the Dropwizard library along with JDBI3.
 
-##Building
+## Building
 Run **gradlew clean build jarIt** to buld a standalone jar that contains all dependencies.
 
 Run **gradlew cucumber** to run all Cucumber tests.
 
-##Requirements
+## Requirements
 
 * PostgresSQL database
     * Port: 5432
