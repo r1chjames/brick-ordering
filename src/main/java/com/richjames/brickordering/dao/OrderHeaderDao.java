@@ -33,7 +33,7 @@ public interface OrderHeaderDao {
                     + tableName +
                     "WHERE " +
                     "id = :id")
-    OrderHeader getOrderLinesById(@Bind("id") UUID id);
+    OrderHeader getOrderHeaderById(@Bind("id") UUID id);
 
     @UseRowMapper(OrderHeaderMapper.class)
     @SqlQuery(

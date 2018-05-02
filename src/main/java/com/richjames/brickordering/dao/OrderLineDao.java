@@ -8,6 +8,7 @@ import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.UseRowMapper;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface OrderLineDao {
@@ -24,8 +25,8 @@ public interface OrderLineDao {
                     " FROM "
                     + tableName +
                     "WHERE " +
-                    "id = :id::UUID")
-    OrderHeader getOrderLinesForId(@Bind("id") UUID id);
+                    "order_id = :orderId::UUID")
+    List<OrderLine> getOrderLinesForId(@Bind("orderId") UUID orderId);
 
     @UseRowMapper(OrderLineMapper.class)
     @SqlQuery(

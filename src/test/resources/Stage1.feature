@@ -20,6 +20,8 @@ Feature: BDD
     When A "Get Order" request is submitted with a valid Order reference
     Then The order details are returned
     And The order details contains the Order reference and the number of bricks ordered
+
+  Scenario: Retrieve single order with an invalid order ref
     When A "Get Order" request is submitted with an invalid Order reference
     Then No order details are returned
 

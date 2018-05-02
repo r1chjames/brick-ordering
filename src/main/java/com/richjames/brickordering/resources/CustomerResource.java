@@ -10,6 +10,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.UUID;
 
 
 @Path("/orders")
@@ -32,6 +33,19 @@ public class CustomerResource {
 
         return Response
                 .accepted(ordersService.createOrder(orderToCreate))
+                .build();
+    }
+
+    @Timed
+    @GET
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    @Path("/{orderId}")
+    public Response getOrderById(
+            @PathParam("orderId") UUID orderId,
+            @Context HttpHeaders headers) {
+
+        return Response
+                .ok(ordersService.getOrderById(orderId))
                 .build();
     }
 

@@ -3,7 +3,9 @@ package com.richjames.brickordering.steps;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.richjames.brickordering.entities.OrderHeader;
+import com.richjames.brickordering.entities.OrderLine;
 import com.richjames.brickordering.resources.ApplicationResources;
+import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -21,11 +23,13 @@ import java.util.UUID;
 import static com.richjames.brickordering.steps.OrderBuilder.buildNewOrder;
 import static com.richjames.brickordering.steps.UtilSteps.startService;
 import static com.richjames.brickordering.steps.UtilSteps.stopService;
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
 public class OrderSteps {
 
     private Data data;
+    private ApplicationResources apiService = setUpRetrofit().create(ApplicationResources.class);
 
     public OrderSteps(Data data) {
         this.data = data;
@@ -41,8 +45,6 @@ public class OrderSteps {
     @When("^A \"([^\"]*)\" request for a number of bricks is submitted$")
     public void ARequestForANumberOfBricksIsSumbitted(String order) throws IOException {
         OrderHeader orderToBeSubmitted = data.getOrderToBeSumitted();
-
-        ApplicationResources apiService = setUpRetrofit().create(ApplicationResources.class);
 
         Response<OrderHeader> returnedOrder = apiService.postNewOrder(orderToBeSubmitted).execute();
         data.setOrderHeaderResponse(returnedOrder.body());
@@ -84,5 +86,41 @@ public class OrderSteps {
     @After
     public void atEnd() throws Exception {
         stopService();
+    }
+
+    @Given("^A customer has submitted an order for some bricks$")
+    public void aCustomerHasSubmittedAnOrderForSomeBricks() throws Throwable {
+        aCustomerWantsToBuyAnyNumberOfBricks();
+        ARequestForANumberOfBricksIsSumbitted("");
+    }
+
+    @When("^A \"([^\"]*)\" request is submitted with a valid Order reference$")
+    public void aRequestIsSubmittedWithAValidOrderReference(String arg0) throws Throwable {
+        UUID orderRef = data.getOrderHeaderResponse().getOrderId();
+        Response<OrderHeader> returnedOrder = apiService.getOrderByRef(orderRef).execute();
+        data.setOrderHeaderResponse(returnedOrder.body());
+    }
+
+    @Then("^The order details are returned$")
+    public void theOrderDetailsAreReturned() throws Throwable {
+        OrderHeader orderReturned = data.getOrderHeaderResponse();
+
+        assertNotNull(orderReturned);
+        assertEquals(2, orderReturned.getOrderLines().size());
+    }
+
+    @And("^The order details contains the Order reference and the number of bricks ordered$")
+    public void theOrderDetailsContainsTheOrderReferenceAndTheNumberOfBricksOrdered() throws Throwable {
+        OrderHeader orderReturned = data.getOrderHeaderResponse();
+        UUID orderRef = data.getOrderHeaderResponse().getOrderId();
+
+        assertEquals(orderRef, orderReturned.getOrderId());
+        assertEquals(21, orderReturned.getOrderLines().stream().mapToInt(OrderLine::getQuantity).sum());
+    }
+
+    @When("^A \"([^\"]*)\" request is submitted with an invalid Order reference$")
+    public void aRequestIsSubmittedWithAnInvalidOrderReference(String arg0) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
     }
 }

@@ -24,7 +24,7 @@ public class OrderBuilder {
 
         OrderLine line2 = OrderLine.builder()
                 .itemNumber(12345678)
-                .quantity(17)
+                .quantity(4)
                 .build();
 
         return Arrays.asList(line1, line2);

@@ -8,6 +8,7 @@ import com.richjames.brickordering.entities.OrderLine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class OrdersService {
 
@@ -30,5 +31,13 @@ public class OrdersService {
 
         orderHeaderCreated.setOrderLines(orderLinesCreated);
         return orderHeaderCreated;
+    }
+
+    public OrderHeader getOrderById(UUID orderId) {
+        OrderHeader orderToReturn = orderHeaderDao.getOrderHeaderById(orderId);
+
+        List<OrderLine> orderLines = orderLineDao.getOrderLinesForId(orderId);
+        orderToReturn.setOrderLines(orderLines);
+        return orderToReturn;
     }
 }
