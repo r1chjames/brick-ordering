@@ -1,6 +1,7 @@
 package com.richjames.brickordering.entities;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -18,7 +19,9 @@ public class OrderHeader {
     private UUID orderId;
     private UUID customerId;
     private List<OrderLine> orderLines;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime dateCreated;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime dateUpdated;
 
     @JsonCreator

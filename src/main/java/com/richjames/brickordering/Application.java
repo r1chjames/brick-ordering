@@ -2,6 +2,7 @@ package com.richjames.brickordering;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.richjames.brickordering.config.ApplicationConfiguration;
 import com.richjames.brickordering.config.JdbiProviderModule;
 import com.richjames.brickordering.resources.CustomerResource;
@@ -43,6 +44,9 @@ public class Application extends io.dropwizard.Application<ApplicationConfigurat
     public void run(ApplicationConfiguration applicationConfiguration, Environment environment) {
         applicationEnvironment = environment;
         environment.jersey().register(CustomerResource.class);
+
+        environment.getObjectMapper().registerModule(new JavaTimeModule());
+        environment.getObjectMapper().configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         environment.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 }

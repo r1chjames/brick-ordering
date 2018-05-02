@@ -1,5 +1,7 @@
 package com.richjames.brickordering.steps;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.richjames.brickordering.entities.OrderHeader;
 import com.richjames.brickordering.resources.ApplicationResources;
 import cucumber.api.java.After;
@@ -59,9 +61,12 @@ public class OrderSteps {
                 "8080",
                 "/order/v1");
 
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
         return new Retrofit.Builder()
                 .baseUrl(fullUri)
-                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create(mapper))
                 .build();
     }
 

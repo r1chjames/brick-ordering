@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface OrderHeaderDao {
 
-    String selectFields = "id, customer_id, last_updated ";
+    String selectFields = "id, customer_id, created, last_updated ";
     String insertFields = "customer_id ";
     String insertValues = ":order.customerId ";
     String tableName = "order_headers ";

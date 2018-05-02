@@ -1,6 +1,5 @@
 package com.richjames.brickordering.dao;
 
-import com.richjames.brickordering.dao.mappers.OrderHeaderMapper;
 import com.richjames.brickordering.dao.mappers.OrderLineMapper;
 import com.richjames.brickordering.entities.OrderHeader;
 import com.richjames.brickordering.entities.OrderLine;
@@ -15,7 +14,7 @@ public interface OrderLineDao {
 
     String selectFields = "id, order_id, item_number, quantity ";
     String insertFields = "order_id, item_number, quantity ";
-    String insertValues = ":line.orderId, :line.itemNumber, :line.quantity ";
+    String insertValues = ":line.orderId::UUID, :line.itemNumber, :line.quantity ";
     String tableName = "order_lines ";
 
     @UseRowMapper(OrderLineMapper.class)
@@ -25,7 +24,7 @@ public interface OrderLineDao {
                     " FROM "
                     + tableName +
                     "WHERE " +
-                    "id = :id")
+                    "id = :id::UUID")
     OrderHeader getOrderLinesForId(@Bind("id") UUID id);
 
     @UseRowMapper(OrderLineMapper.class)
@@ -36,6 +35,6 @@ public interface OrderLineDao {
                     "VALUES (" +
                     insertValues +
                     ") RETURNING *")
-    OrderLineMapper createOrderLine(@BindBean("line") OrderLine orderLine);
+    OrderLine createOrderLine(@BindBean("line") OrderLine orderLine);
 
 }

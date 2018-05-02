@@ -14,8 +14,8 @@ public class OrderHeaderMapper implements RowMapper<OrderHeader> {
         return OrderHeader.builder()
                 .orderId(UUID.fromString(rs.getString("id")))
                 .customerId(UUID.fromString(rs.getString("customer_id")))
-                .dateCreated(rs.getTimestamp("date_created").toLocalDateTime())
-                .dateUpdated(rs.getTimestamp("date_updated").toLocalDateTime())
+                .dateCreated(rs.getTimestamp("created").toLocalDateTime())
+                .dateUpdated(rs.getTimestamp("last_updated").toLocalDateTime())
                 .build();
     }
 }
