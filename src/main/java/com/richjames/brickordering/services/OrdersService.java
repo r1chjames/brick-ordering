@@ -45,4 +45,14 @@ public class OrdersService {
         orderToReturn.setOrderLines(orderLines);
         return orderToReturn;
     }
+
+    public List<OrderHeader> getAllOrders() {
+        List<OrderHeader> orderHeaders = orderHeaderDao.getAllOrderHeaders();
+        orderHeaders.forEach(orderHeader -> {
+            orderHeader.setOrderLines(orderLineDao.getOrderLinesForId(orderHeader.getOrderId()));
+        });
+
+
+        return orderHeaders;
+    }
 }

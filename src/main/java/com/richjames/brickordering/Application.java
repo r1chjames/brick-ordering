@@ -10,6 +10,7 @@ import com.richjames.brickordering.resources.CustomerResource;
 import de.thomaskrille.dropwizard_template_config.TemplateConfigBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller;
@@ -17,7 +18,10 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstal
 @Slf4j
 public class Application extends io.dropwizard.Application<ApplicationConfiguration> {
 
+    @Getter
     private static Environment applicationEnvironment;
+    @Getter
+    private static ApplicationConfiguration configuration;
 
     public static void main(String[] args) throws Exception {
         Application application = new Application();
@@ -44,6 +48,7 @@ public class Application extends io.dropwizard.Application<ApplicationConfigurat
     @Override
     public void run(ApplicationConfiguration applicationConfiguration, Environment environment) {
         applicationEnvironment = environment;
+        configuration = applicationConfiguration;
         environment.jersey().register(CustomerResource.class);
         environment.jersey().register(new ApplicationExceptionMapper());
 

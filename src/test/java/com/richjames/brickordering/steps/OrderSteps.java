@@ -5,24 +5,25 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.richjames.brickordering.entities.OrderHeader;
 import com.richjames.brickordering.entities.OrderLine;
 import com.richjames.brickordering.resources.ApplicationResources;
-import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import cucumber.api.java8.En;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
+import static com.richjames.brickordering.steps.OrderBuilder.buildMultipleOrders;
 import static com.richjames.brickordering.steps.OrderBuilder.buildNewOrder;
 import static com.richjames.brickordering.steps.UtilSteps.startService;
 import static com.richjames.brickordering.steps.UtilSteps.stopService;
+import static com.richjames.brickordering.steps.UtilSteps.truncateTables;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -46,8 +47,16 @@ public class OrderSteps {
     @When("^A \"([^\"]*)\" request for a number of bricks is submitted$")
     public void ARequestForANumberOfBricksIsSumbitted(String order) throws IOException {
         OrderHeader orderToBeSubmitted = data.getOrderToBeSumitted();
+        submitOrder(orderToBeSubmitted);
+    }
 
-        Response<OrderHeader> returnedOrder = apiService.postNewOrder(orderToBeSubmitted).execute();
+    private void submitOrder(OrderHeader orderToBeSubmitted) {
+        Response<OrderHeader> returnedOrder = null;
+        try {
+            returnedOrder = apiService.postNewOrder(orderToBeSubmitted).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         data.setOrderHeaderResponse(returnedOrder.body());
     }
 
@@ -82,6 +91,7 @@ public class OrderSteps {
     @Before
     public void startUp() throws Throwable {
         startService();
+        truncateTables();
     }
 
     @After
@@ -132,5 +142,24 @@ public class OrderSteps {
     public void noOrderDetailsAreReturned() throws Throwable {
         assertNull(data.getOrderHeaderResponse());
         assertEquals(404, data.getResponseCode());
+    }
+
+    @Given("^Many customers have submitted orders for bricks$")
+    public void manyCustomersHaveSubmittedOrdersForBricks() throws Throwable {
+        List<OrderHeader> orderHeaders = buildMultipleOrders();
+        orderHeaders.forEach(this::submitOrder);
+    }
+
+    @When("^A \"([^\"]*)\" request is submitted$")
+    public void aRequestIsSubmitted(String arg0) throws Throwable {
+        Response<List<OrderHeader>> returnedOrder = apiService.getAllOrders().execute();
+        data.setOrderHeaderResponseList(returnedOrder.body());
+    }
+
+    @Then("^All the orders details are returned$")
+    public void allTheOrdersDetailsAreReturned() throws Throwable {
+        List<OrderHeader> orderHeaderResponseList = data.getOrderHeaderResponseList();
+        assertNotNull(orderHeaderResponseList);
+        assertEquals(3, orderHeaderResponseList.size());
     }
 }

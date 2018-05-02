@@ -16,6 +16,28 @@ public class OrderBuilder {
                 .build();
     }
 
+    static OrderHeader buildSecondOrder() {
+        return OrderHeader.builder()
+                .customerId(UUID.randomUUID())
+                .orderLines(buildNewOrderLines())
+                .build();
+    }
+
+    static OrderHeader buildThirdOrder() {
+        return OrderHeader.builder()
+                .customerId(UUID.randomUUID())
+                .orderLines(buildNewOrderLines())
+                .build();
+    }
+
+    static List<OrderHeader> buildMultipleOrders() {
+        OrderHeader orderOne = buildNewOrder();
+        OrderHeader orderTwo = buildSecondOrder();
+        OrderHeader orderThree = buildThirdOrder();
+
+        return Arrays.asList(orderOne, orderTwo, orderThree);
+    }
+
     private static List<OrderLine> buildNewOrderLines() {
         OrderLine line1 = OrderLine.builder()
                 .itemNumber(12345678)

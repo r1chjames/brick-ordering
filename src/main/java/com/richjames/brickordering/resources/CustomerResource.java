@@ -49,4 +49,16 @@ public class CustomerResource {
                 .build();
     }
 
+    @Timed
+    @GET
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    @Path("/")
+    public Response getAllOrders(
+            @Context HttpHeaders headers) {
+
+        return Response
+                .ok(ordersService.getAllOrders())
+                .build();
+    }
+
 }
