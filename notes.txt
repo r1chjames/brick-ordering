@@ -8,17 +8,19 @@ Endpoints:
 SQL:
 
 CREATE DATABASE ordering;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE order_headers
 (
-  id                UUID PRIMARY KEY,
+  id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   customer_id       UUID,
   last_updated      TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE orderLines
 (
-  id                UUID REFERENCES order_headers(id),
+  id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  order_id          UUID REFERENCES order_headers(id),
   item_number       INTEGER,
   quantity          INTEGER
 );

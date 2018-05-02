@@ -1,5 +1,7 @@
 package com.richjames.brickordering;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.richjames.brickordering.config.ApplicationConfiguration;
 import com.richjames.brickordering.resources.CustomerResource;
 import de.thomaskrille.dropwizard_template_config.TemplateConfigBundle;
@@ -39,5 +41,6 @@ public class Application extends io.dropwizard.Application<ApplicationConfigurat
     public void run(ApplicationConfiguration applicationConfiguration, Environment environment) {
         applicationEnvironment = environment;
         environment.jersey().register(CustomerResource.class);
+        environment.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 }

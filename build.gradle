@@ -59,6 +59,9 @@ dependencies {
             'org.json:json:20170516',
             'com.diffplug.durian:durian:3.4.0',
 
+            "org.jdbi:jdbi3-core:3.1.1",
+            "org.jdbi:jdbi3-sqlobject:3.1.1",
+
             'postgresql:postgresql:9.4.1208-jdbc42-atlassian-hosted',
             'org.jdbi:jdbi:2.38.1',
             'ru.vyarus.guicey:guicey-jdbi:0.3.0',

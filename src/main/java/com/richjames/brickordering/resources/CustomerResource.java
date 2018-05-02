@@ -1,10 +1,11 @@
 package com.richjames.brickordering.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.google.inject.Inject;
+import com.richjames.brickordering.entities.OrderHeader;
+import com.richjames.brickordering.services.OrdersService;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -12,18 +13,25 @@ import javax.ws.rs.core.Response;
 
 
 @Path("/orders")
-@Produces(MediaType.APPLICATION_JSON)
 public class CustomerResource {
 
+    private OrdersService ordersService;
+
+    @Inject
+    public CustomerResource(OrdersService ordersService) {
+        this.ordersService = ordersService;
+    }
 
     @Timed
-    @GET
-    @Produces(value = MediaType.APPLICATION_JSON)
-    @Path("/example/")
-    public Response getData(@Context HttpHeaders headers) {
+    @POST
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    @Path("/")
+    public Response createOrder(
+            OrderHeader orderToCreate,
+            @Context HttpHeaders headers) {
 
         return Response
-                .ok()
+                .accepted(ordersService.createOrder(orderToCreate))
                 .build();
     }
 

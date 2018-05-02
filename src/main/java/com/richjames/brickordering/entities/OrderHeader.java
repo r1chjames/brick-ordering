@@ -1,9 +1,8 @@
 package com.richjames.brickordering.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,8 +10,9 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderHeader {
 
     private UUID orderId;
@@ -21,7 +21,8 @@ public class OrderHeader {
     private LocalDateTime dateCreated;
     private LocalDateTime dateUpdated;
 
-    public OrderHeader(UUID customerId, List<OrderLine> orderLines) {
+    @JsonCreator
+    public OrderHeader(@JsonProperty("customerId") UUID customerId, @JsonProperty("orderLines") List<OrderLine> orderLines) {
         this.orderId = UUID.randomUUID();
         this.customerId = customerId;
         this.orderLines = orderLines;

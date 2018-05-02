@@ -38,11 +38,11 @@ public class OrderSteps {
 
     @When("^A \"([^\"]*)\" request for a number of bricks is submitted$")
     public void ARequestForANumberOfBricksIsSumbitted(String order) throws IOException {
-        OrderHeader orderToBeSumbitted = data.getOrderToBeSumitted();
+        OrderHeader orderToBeSubmitted = data.getOrderToBeSumitted();
 
         ApplicationResources apiService = setUpRetrofit().create(ApplicationResources.class);
 
-        Response<OrderHeader> returnedOrder = apiService.postNewOrder(orderToBeSumbitted).execute();
+        Response<OrderHeader> returnedOrder = apiService.postNewOrder(orderToBeSubmitted).execute();
         data.setOrderHeaderResponse(returnedOrder.body());
     }
 
